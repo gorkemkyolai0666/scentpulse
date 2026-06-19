@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Atelier {
+  id        String   @id @default(uuid())
+  name      String
+  address   String   @default("")
+  city      String   @default("")
+  district  String   @default("")
+  phone     String   @default("")
+  email     String   @default("")
+  taxNo     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users        User[]
+  clients      Client[]
+  appointments Appointment[]
+  orders       Order[]
+  formulas     Formula[]
+  ingredients  Ingredient[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         UserRole @default(perfumer)
+  specialty    String   @default("")
+  atelierId    String
+  atelier      Atelier  @relation(fields: [atelierId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum UserRole {
+  admin
+  perfumer
+  sales
+  lab_technician
+}
+
+model Client {
+  id          String    @id @default(uuid())
+  firstName   String
+  lastName    String
+  phone       String
+  email       String    @default("")
+  birthDate   DateTime?
+  address     String    @default("")
+  city        String    @default("")
+  preferences String    @default("")
+  notes       String    @default("")
+  atelierId   String
+  atelier     Atelier   @relation(fields: [atelierId], references: [id])
+  appointments Appointment[]
+  orders      Order[]
+  formulas    Formula[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum AppointmentType {
+  consultation
+  blending
+  pickup
+  follow_up
+}
+
+enum AppointmentStatus {
+  scheduled
+  confirmed
+  in_progress
+  completed
+  cancelled
+  no_show
+}
+
+model Appointment {
+  id           String            @id @default(uuid())
+  date         DateTime
+  duration     Int               @default(45)
+  type         AppointmentType   @default(consultation)
+  status       AppointmentStatus @default(scheduled)
+  notes        String            @default("")
+  perfumerName String            @default("")
+  clientId     String
+  client       Client            @relation(fields: [clientId], references: [id])
+  atelierId    String
+  atelier      Atelier           @relation(fields: [atelierId], references: [id])
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+enum OrderStatus {
+  quoted
+  confirmed
+  in_production
+  ready
+  delivered
+  cancelled
+}
+
+enum Concentration {
+  edt
+  edp
+  parfum
+  extrait
+}
+
+model Order {
+  id           String        @id @default(uuid())
+  productName  String        @default("")
+  volumeMl     Int           @default(50)
+  concentration Concentration @default(edp)
+  status       OrderStatus   @default(quoted)
+  totalPrice   Float         @default(0)
+  paidAmount   Float         @default(0)
+  orderDate    DateTime
+  deliveryDate DateTime?
+  notes        String        @default("")
+  clientId     String
+  client       Client        @relation(fields: [clientId], references: [id])
+  formulaId    String?
+  formula      Formula?      @relation(fields: [formulaId], references: [id])
+  atelierId    String
+  atelier      Atelier       @relation(fields: [atelierId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Formula {
+  id           String        @id @default(uuid())
+  name         String
+  topNotes     String        @default("")
+  middleNotes  String        @default("")
+  baseNotes    String        @default("")
+  concentration Concentration @default(edp)
+  description  String        @default("")
+  clientId     String
+  client       Client        @relation(fields: [clientId], references: [id])
+  atelierId    String
+  atelier      Atelier       @relation(fields: [atelierId], references: [id])
+  orders       Order[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum IngredientCategory {
+  essential_oil
+  absolute
+  synthetic
+  alcohol
+  fixative
+  other
+}
+
+model Ingredient {
+  id        String             @id @default(uuid())
+  name      String
+  category  IngredientCategory @default(essential_oil)
+  stockMl   Float              @default(0)
+  unitCost  Float              @default(0)
+  supplier  String             @default("")
+  notes     String             @default("")
+  atelierId String
+  atelier   Atelier            @relation(fields: [atelierId], references: [id])
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}

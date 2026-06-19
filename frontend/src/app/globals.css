@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #faf7f2;
+    --bg-secondary: #ffffff;
+    --bg-nav: #2d1b4e;
+    --bg-nav-hover: #3d2866;
+    --text-primary: #2d1b4e;
+    --text-secondary: #4a3568;
+    --text-muted: #7a6b8a;
+    --text-nav: #faf7f2;
+    --text-nav-muted: #c4b5d4;
+    --border-color: #e8e0f0;
+    --brand: #2d1b4e;
+    --accent: #b76e79;
+    --accent-light: #d4959e;
+    --cream: #faf7f2;
+    --success: #2d6a4f;
+    --danger: #c0392b;
+    --warning: #b8860b;
+  }
+
+  .dark {
+    --bg-primary: #1a0f2e;
+    --bg-secondary: #2d1b4e;
+    --bg-nav: #120a22;
+    --bg-nav-hover: #2d1b4e;
+    --text-primary: #faf7f2;
+    --text-secondary: #d4c8e8;
+    --text-muted: #a898c0;
+    --text-nav: #faf7f2;
+    --text-nav-muted: #9a8ab0;
+    --border-color: #3d2866;
+    --brand: #faf7f2;
+    --accent: #d4959e;
+    --accent-light: #e8b4bc;
+    --cream: #faf7f2;
+    --success: #52b788;
+    --danger: #e74c3c;
+    --warning: #f0c14b;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .font-display {
+    font-family: var(--font-cormorant), Georgia, serif;
+  }
+}
+
+@layer components {
+  .premium-card {
+    @apply rounded-xl border transition-shadow;
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 8px rgba(45, 27, 78, 0.06);
+  }
+
+  .premium-card:hover {
+    box-shadow: 0 8px 24px rgba(45, 27, 78, 0.1);
+  }
+
+  .stat-card {
+    @apply premium-card p-5 flex flex-col gap-2;
+  }
+
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-lg font-medium text-white transition-all;
+    background: linear-gradient(135deg, #2d1b4e, #4a3568);
+    border: 1px solid rgba(183, 110, 121, 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 16px rgba(183, 110, 121, 0.3);
+  }
+
+  .btn-accent {
+    @apply px-5 py-2.5 rounded-lg font-medium transition-all;
+    background: linear-gradient(135deg, #b76e79, #d4959e);
+    color: #faf7f2;
+  }
+
+  .btn-accent:hover {
+    box-shadow: 0 4px 16px rgba(183, 110, 121, 0.4);
+  }
+
+  .btn-secondary {
+    @apply px-5 py-2.5 rounded-lg font-medium transition-all;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg outline-none transition-all;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.15);
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge;
+    background: rgba(45, 106, 79, 0.12);
+    color: var(--success);
+  }
+
+  .badge-warning {
+    @apply badge;
+    background: rgba(184, 134, 11, 0.12);
+    color: var(--warning);
+  }
+
+  .badge-danger {
+    @apply badge;
+    background: rgba(192, 57, 43, 0.12);
+    color: var(--danger);
+  }
+
+  .badge-info {
+    @apply badge;
+    background: rgba(45, 27, 78, 0.08);
+    color: var(--text-secondary);
+  }
+
+  .badge-gold {
+    @apply badge;
+    background: rgba(183, 110, 121, 0.15);
+    color: var(--accent);
+  }
+}

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: scentpulse
+      POSTGRES_PASSWORD: scentpulse123
+      POSTGRES_DB: scentpulse
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    ports:
+      - "4037:4037"
+    environment:
+      DATABASE_URL: postgresql://scentpulse:scentpulse123@postgres:5432/scentpulse?schema=public
+      JWT_SECRET: scentpulse-dev-secret
+      FRONTEND_URL: http://localhost:3037
+      PORT: 4037
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3037:3037"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4037/api
+
+volumes:
+  pgdata:
